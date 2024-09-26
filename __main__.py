@@ -158,10 +158,9 @@ while True:
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                 mouse_clicked = True
                 clicked_mouse_pos = mouse_pos
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-                mouse_clicked = False
-                create_tiles = True
-                clicked_mouse_pos = (0,0)
+        if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+            mouse_clicked = False
+            create_tiles = True
         # Tile Generation
         if create_tiles:
             (tile_map,tile_map_last_indices) = create_initial_tiles(TILE_SIZE)
