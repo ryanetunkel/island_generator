@@ -52,7 +52,7 @@ image = default_image
 scale = 4 * GLOBAL_SCALAR
 TILE_SIZE = int(scale * 16)
 
-tile_pos_locator = True
+tile_pos_locator = False
 constant_pos_display = False
 
 clicked_mouse_pos = (0,0)
