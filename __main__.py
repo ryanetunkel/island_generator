@@ -159,7 +159,6 @@ while True:
                 mouse_clicked = True
                 clicked_mouse_pos = mouse_pos
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            mouse_clicked = False
             create_tiles = True
         # Tile Generation
         if create_tiles:
@@ -171,6 +170,7 @@ while True:
     if tile_pos_locator and mouse_clicked:
         print("Clicked Tile Pos:",16*math.floor(clicked_mouse_pos[0]/16),16*math.floor(clicked_mouse_pos[1]/16))
         print("Clicked Tile:",math.floor(clicked_mouse_pos[0]/16),math.floor(clicked_mouse_pos[1]/16))
+        mouse_clicked = False
 
     pygame.display.update()
     clock.tick(60)
