@@ -162,7 +162,7 @@ while True:
                 mouse_clicked = False
                 create_tiles = True
                 clicked_mouse_pos = (0,0)
-        end_tile = (0,0)
+        # Tile Generation
         if create_tiles:
             (tile_map,tile_map_last_indices) = create_initial_tiles(TILE_SIZE)
             check_surrounding_tiles(tile_map, TILE_SIZE)
