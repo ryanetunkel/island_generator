@@ -53,33 +53,67 @@ scale = 4 * GLOBAL_SCALAR
 TILE_SIZE = int(scale * 16)
 
 tile_pos_locator = True
-constant_pos_display = True
+constant_pos_display = False
 
 clicked_mouse_pos = (0,0)
 mouse_clicked = False
 create_tiles = False
 
 
-def check_surrounding_tiles(tile_map: dict[int,tuple[tuple[int,int],int]]):
+def check_surrounding_tiles(tile_map: dict[int,tuple[tuple[int,int],int]], tile_size: int):
+    # Neighbors: t = top, r = right, b = bottom, l = left, n = none
+    tile_map_water_descriptions = {"n": 0}
+    tile_map_land_descriptions = {
+        "n": 1, "r": 2, "rl": 3, "l": 4,
+        "b": 5, "rb": 6, "rbl": 7, "bl":8,
+        "tb": 9, "trb": 10, "trbl": 11, "tbl": 12,
+        "t": 13, "tr": 14, "trl": 15, "tl": 16,
+    }
+    tile_map_water_values = tile_map_water_descriptions.values()
+    tile_map_land_values = tile_map_land_descriptions.values()
+    tile_attributes_list = list(tile_map.values())
     for tile_id, tile_attributes in tile_map.items():
         pos = tile_attributes[0]
+        (x_pos,y_pos) = pos
         tile_type = tile_attributes[1]
+        if tile_type != 0:
+            tile_description = ""
+            top_tile = get_tile_type_with_pos((x_pos, y_pos - tile_size), tile_attributes_list)
+            right_tile = get_tile_type_with_pos((x_pos + tile_size, y_pos), tile_attributes_list)
+            bottom_tile = get_tile_type_with_pos((x_pos, y_pos + tile_size), tile_attributes_list)
+            left_tile = get_tile_type_with_pos((x_pos - tile_size, y_pos), tile_attributes_list)
+            if top_tile != -1 and top_tile not in tile_map_water_values:
+                tile_description += "t"
+            if right_tile != -1 and right_tile not in tile_map_water_values:
+                tile_description += "r"
+            if bottom_tile != -1 and bottom_tile not in tile_map_water_values:
+                tile_description += "b"
+            if left_tile != -1 and left_tile not in tile_map_water_values:
+                tile_description += "l"
+            if tile_description == "":
+                tile_description = "n"
+            if tile_type in tile_map_land_values:
+                new_tile_type = tile_map_land_descriptions[tile_description]
+                tile_map.update({tile_id:(pos,new_tile_type)})
 
 
-def create_initial_tiles(tile_size: int) -> tuple[dict,dict]:
+def get_tile_type_with_pos(pos: tuple[int,int], tile_attributes_list: list[tuple[tuple[int,int],int]]) -> int:
+    (x_pos,y_pos) = pos
+    if x_pos >= 0 and y_pos >= 0:
+        for (tile_pos,tile_type) in tile_attributes_list:
+            if tile_pos == pos:
+                return tile_type
+    return -1
+
+
+def create_initial_tiles(tile_size: int) -> tuple[dict,dict,tuple[int,int]]:
     x_index = 0
     y_index = 0
     y_shift = 0
     tile_map_id = 0
     tile_map = {}
-    tile_surf_rect_map = {}
     while y_index + 2 * tile_size < WINDOW_HEIGHT or x_index < WINDOW_WIDTH:
         rand_idx = random.randint(0,1)
-        if rand_idx == 1:
-            rand_idx = random.randint(1,16)
-
-        frame = frames[rand_idx]
-        frame = pygame.transform.scale_by(frame,scale)
 
         if x_index != 0:
             if x_index + tile_size > WINDOW_WIDTH:
@@ -87,16 +121,24 @@ def create_initial_tiles(tile_size: int) -> tuple[dict,dict]:
                 y_index += tile_size
                 x_index = 0
 
-        # Remove this when implement check_surrounding_tiles and make separate display function reading from the tile_map
-        rect = frame.get_rect(topleft = (x_index,y_index))
-        screen.blit(frame,rect)
-
-        tile_surf_rect_map[tile_map_id] = (frame,rect)
         tile_map[tile_map_id] = ((x_index,y_index),rand_idx)
 
         tile_map_id += 1
         x_index += tile_size
-    return (tile_map,tile_surf_rect_map)
+    tile_map_last_x_pos = x_index - tile_size
+    tile_map_last_y_pos = y_index
+    tile_map_dimensions = (tile_map_last_x_pos, tile_map_last_y_pos)
+    return (tile_map,tile_map_dimensions)
+
+
+def display_tiles(tile_map: dict[int,tuple[tuple[int,int],int]]):
+    for tile_attributes in tile_map.values():
+        pos = tile_attributes[0]
+        tile_type = tile_attributes[1]
+        frame = frames[tile_type]
+        frame = pygame.transform.scale_by(frame,scale)
+        rect = frame.get_rect(topleft = pos)
+        screen.blit(frame,rect)
 
 
 while True:
@@ -122,9 +164,9 @@ while True:
                 clicked_mouse_pos = (0,0)
         end_tile = (0,0)
         if create_tiles:
-            (tile_map,tile_surf_rect_map) = create_initial_tiles(TILE_SIZE)
-            # from pprint import pprint
-            # pprint(tile_map)
+            (tile_map,tile_map_last_indices) = create_initial_tiles(TILE_SIZE)
+            check_surrounding_tiles(tile_map, TILE_SIZE)
+            display_tiles(tile_map)
             create_tiles = False
 
     if tile_pos_locator and mouse_clicked:
