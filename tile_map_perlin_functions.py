@@ -24,17 +24,23 @@ def create_tiles_with_coloring(
 
 def check_water_or_land_with_color(tile_map: dict[int, tuple[tuple[int, int], int, pygame.Color]]):
     if tile_map:
+        LAND_CHANCE_RGB_R_INT = convert_percentage_to_rgb_r_int()
         for tile_id, tile in tile_map.items():
             position = tile[0]
             color = tile[2]
             # print("Color:",pygame.Color(color))
             # print("4D:",pygame.Color("#4D4D4D").r)
-            if pygame.Color(color).r < pygame.Color("#4D4D4D").r:
+            if pygame.Color(color).r < LAND_CHANCE_RGB_R_INT:
                 new_tile_type = 1
             else:
                 new_tile_type = 0
             tile = (position,int(new_tile_type),color)
             tile_map.update({tile_id:tile})
+
+
+def convert_percentage_to_rgb_r_int():
+    MAX = 16*9+9 # "#999999".r
+    return int((LAND_CHANCE_PERCENT_INT)/100 * MAX)
 
 
 def update_vector_gen_tiles(

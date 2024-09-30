@@ -52,18 +52,23 @@ TILE_SIZE = int(scale * IMAGE_PIXEL_SIZE)
 
 tile_pos_locator = True
 constant_pos_display = False
+
 generation = True
 load_from_shape = not generation
+
 post_color_tiles = False
 pre_color_tiles = not post_color_tiles
+
 vectors_rotate = True
 vectors_display = False
+color_tiles_after = True
 
 clicked_mouse_pos = (0,0)
 mouse_clicked = False
 
 vector_list = []
 tile_map = {}
+LAND_CHANCE_PERCENT_INT = 50
 TILE_MAP_WIDTH = math.floor(WINDOW_WIDTH/TILE_SIZE)
 TILE_MAP_HEIGHT = math.floor(WINDOW_HEIGHT/TILE_SIZE)
 NUM_TILES = TILE_MAP_WIDTH*TILE_MAP_HEIGHT

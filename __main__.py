@@ -57,7 +57,8 @@ while True:
             display_tiles(tile_map)
             if vectors_rotate:
                 rotate_vectors(vector_list)
-            color_tiles_using_vectors_after_tile_creation(tile_map,vector_list)
+            if color_tiles_after:
+                color_tiles_using_vectors_after_tile_creation(tile_map,vector_list)
         elif pre_color_tiles:
             display_tiles_with_color(tile_map)
             if vectors_rotate:

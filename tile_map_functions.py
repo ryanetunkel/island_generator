@@ -83,7 +83,11 @@ def create_tiles(random_gen:bool) -> dict[int,tuple[tuple[int,int],int,pygame.Co
         if not random_gen:
             tile_type = 0
         else:
-            tile_type = randint(0,1)
+            tile_type = randint(1,100)
+            if tile_type > LAND_CHANCE_PERCENT_INT:
+                tile_type = 0
+            else:
+                tile_type = 1
 
         if x_pos != 0:
             if x_pos > TILE_MAP_END_X_POS:
