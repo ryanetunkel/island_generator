@@ -6,6 +6,7 @@ from random import randint
 import pygame
 
 from global_vars import *
+from interpret_desired_island import *
 from perlin_noise_generation import *
 from tile_map_perlin_functions import *
 from tile_map_functions import *
@@ -38,25 +39,34 @@ while True:
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
             vector_list = []
             tile_map = {}
-            if post_color_tiles:
+            if generation:
+                if post_color_tiles:
+                    tile_map = create_tiles(True)
+                    check_surrounding_tiles(tile_map)
+                    vector_list = create_initial_vectors()
+                elif pre_color_tiles:
+                    (tile_map,vector_list) = create_tiles_with_coloring()
+            elif load_from_shape:
+                print("In here")
                 tile_map = create_tiles(True)
+                load_tile_types_from_desired_island_shape(tile_map)
                 check_surrounding_tiles(tile_map)
-                vector_list = create_initial_vectors()
-            elif pre_color_tiles:
-                (tile_map,vector_list) = create_tiles_with_coloring()
     # Displays, Rotation, Coloring
-    if post_color_tiles:
+    if generation:
+        if post_color_tiles:
+            display_tiles(tile_map)
+            if vectors_rotate:
+                rotate_vectors(vector_list)
+            color_tiles_using_vectors_after_tile_creation(tile_map,vector_list)
+        elif pre_color_tiles:
+            display_tiles_with_color(tile_map)
+            if vectors_rotate:
+                rotate_vectors(vector_list)
+            update_vector_gen_tiles(tile_map,vector_list)
+        if vectors_display:
+            display_vectors(vector_list)
+    elif load_from_shape:
         display_tiles(tile_map)
-        if vectors_rotate:
-            rotate_vectors(vector_list)
-        color_tiles_using_vectors_after_tile_creation(tile_map,vector_list)
-    elif pre_color_tiles:
-        display_tiles_with_color(tile_map)
-        if vectors_rotate:
-            rotate_vectors(vector_list)
-        update_vector_gen_tiles(tile_map,vector_list)
-    if vectors_display:
-        display_vectors(vector_list)
 
 
     # Tile Pos Locator Display

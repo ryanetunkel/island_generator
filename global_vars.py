@@ -6,8 +6,8 @@ import spritesheet
 
 PIXEL_SIZE = 1
 GLOBAL_SCALAR = PIXEL_SIZE/4
-WINDOW_HEIGHT = 600
-WINDOW_WIDTH = 1200
+WINDOW_HEIGHT = 32 * 16
+WINDOW_WIDTH = 32 * 16
 WINDOW_SIZE = (WINDOW_WIDTH,WINDOW_HEIGHT)
 WINDOW_SCALAR = ((WINDOW_WIDTH + WINDOW_HEIGHT)/1200)
 CENTER_SCREEN = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
@@ -46,12 +46,14 @@ images = sprite_sheet.images_at(image_coords, colorkey=(0, 0, 0))
 image = default_image
 IMAGE_PIXEL_SIZE = 16
 
-scale_slider = 8
+scale_slider = 4
 scale = scale_slider * GLOBAL_SCALAR
 TILE_SIZE = int(scale * IMAGE_PIXEL_SIZE)
 
 tile_pos_locator = True
 constant_pos_display = False
+generation = True
+load_from_shape = not generation
 post_color_tiles = False
 pre_color_tiles = not post_color_tiles
 vectors_rotate = True
