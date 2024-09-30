@@ -22,7 +22,7 @@ while True:
         tiles_created = False
         mouse_pos = (mouse_x,mouse_y)
         # Constant Pos Display
-        if constant_pos_display:
+        if constant_mouse_pos_display:
             print("Current Mouse Pos",mouse_pos)
             print("Current Tile Pos",16*math.floor(mouse_x/16),16*math.floor(mouse_y/16))
             print("Current Tile:",math.floor(mouse_x/16),math.floor(mouse_y/16))

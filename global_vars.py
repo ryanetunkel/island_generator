@@ -4,10 +4,13 @@ import math
 import pygame
 import spritesheet
 
+from user_prompts import *
+
 PIXEL_SIZE = 1
 GLOBAL_SCALAR = PIXEL_SIZE/4
-WINDOW_HEIGHT = 32 * 16
-WINDOW_WIDTH = 32 * 16
+(set_window_dimensions,window_width_input,window_height_input) = window_dimensions()
+WINDOW_WIDTH = 32 * 16 if not set_window_dimensions else window_width_input
+WINDOW_HEIGHT = 32 * 16 if not set_window_dimensions else window_height_input
 WINDOW_SIZE = (WINDOW_WIDTH,WINDOW_HEIGHT)
 WINDOW_SCALAR = ((WINDOW_WIDTH + WINDOW_HEIGHT)/1200)
 CENTER_SCREEN = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
@@ -46,12 +49,30 @@ images = sprite_sheet.images_at(image_coords, colorkey=(0, 0, 0))
 image = default_image
 IMAGE_PIXEL_SIZE = 16
 
-scale_slider = 4
-scale = scale_slider * GLOBAL_SCALAR
+(set_scale_slider_input,scale_slider_input) = scale_slider()
+scale_slider_value = 4 if not set_scale_slider_input else scale_slider_input
+scale = scale_slider_value * GLOBAL_SCALAR
 TILE_SIZE = int(scale * IMAGE_PIXEL_SIZE)
 
+vector_list = []
+tile_map = {}
+LAND_CHANCE_PERCENT_INT = 50 # Next to add to user prompts
+TILE_MAP_WIDTH = math.floor(WINDOW_WIDTH/TILE_SIZE)
+TILE_MAP_HEIGHT = math.floor(WINDOW_HEIGHT/TILE_SIZE)
+NUM_TILES = TILE_MAP_WIDTH*TILE_MAP_HEIGHT
+VECTORS_WIDTH = TILE_MAP_WIDTH+1
+VECTORS_HEIGHT = TILE_MAP_HEIGHT+1
+NUM_VECTORS = VECTORS_WIDTH*VECTORS_HEIGHT
+(TILE_MAP_END_X_POS,TILE_MAP_END_Y_POS) = (((TILE_MAP_WIDTH*TILE_SIZE)-TILE_SIZE),((TILE_MAP_HEIGHT*TILE_SIZE)-TILE_SIZE))
+TILE_MAP_END_POS = (TILE_MAP_END_X_POS,TILE_MAP_END_Y_POS)
+(VECTORS_END_X_POS,VECTORS_END_Y_POS) = (((VECTORS_WIDTH*TILE_SIZE)-TILE_SIZE),((VECTORS_HEIGHT*TILE_SIZE)-TILE_SIZE))
+VECTORS_END_POS = (VECTORS_END_X_POS,VECTORS_END_Y_POS)
+tile_map_positions = []
+tile_map_types = []
+
+
 tile_pos_locator = True
-constant_pos_display = False
+constant_mouse_pos_display = False
 
 generation = True
 load_from_shape = not generation
@@ -65,19 +86,3 @@ color_tiles_after = True
 
 clicked_mouse_pos = (0,0)
 mouse_clicked = False
-
-vector_list = []
-tile_map = {}
-LAND_CHANCE_PERCENT_INT = 50
-TILE_MAP_WIDTH = math.floor(WINDOW_WIDTH/TILE_SIZE)
-TILE_MAP_HEIGHT = math.floor(WINDOW_HEIGHT/TILE_SIZE)
-NUM_TILES = TILE_MAP_WIDTH*TILE_MAP_HEIGHT
-VECTORS_WIDTH = TILE_MAP_WIDTH+1
-VECTORS_HEIGHT = TILE_MAP_HEIGHT+1
-NUM_VECTORS = VECTORS_WIDTH*VECTORS_HEIGHT
-(TILE_MAP_END_X_POS,TILE_MAP_END_Y_POS) = (((TILE_MAP_WIDTH*TILE_SIZE)-TILE_SIZE),((TILE_MAP_HEIGHT*TILE_SIZE)-TILE_SIZE))
-TILE_MAP_END_POS = (TILE_MAP_END_X_POS,TILE_MAP_END_Y_POS)
-(VECTORS_END_X_POS,VECTORS_END_Y_POS) = (((VECTORS_WIDTH*TILE_SIZE)-TILE_SIZE),((VECTORS_HEIGHT*TILE_SIZE)-TILE_SIZE))
-VECTORS_END_POS = (VECTORS_END_X_POS,VECTORS_END_Y_POS)
-tile_map_positions = []
-tile_map_types = []
