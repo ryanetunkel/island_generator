@@ -21,7 +21,6 @@ pygame.display.set_caption("Island Generator")
 # pygame.display.set_icon(pygame_icon)
 clock = pygame.time.Clock()
 # test_font = pygame.font.Font("harolds_journey/font/Pixeltype.ttf",50)
-pygame.math.Vector2(CENTER_SCREEN)
 bg_surf = pygame.draw.rect(screen,"#222277",(0,0,WINDOW_WIDTH,WINDOW_HEIGHT))
 # bg_surf = pygame.image.load("").convert_alpha()
 # bg_height = bg_surf.get_height()
@@ -49,14 +48,15 @@ images = sprite_sheet.images_at(image_coords, colorkey=(0, 0, 0))
 image = default_image
 IMAGE_PIXEL_SIZE = 16
 
-(set_scale_slider_input,scale_slider_input) = scale_slider()
-scale_slider_value = 4 if not set_scale_slider_input else scale_slider_input
+(set_scale_slider,scale_slider_input) = scale_slider()
+scale_slider_value = 4 if not set_scale_slider else scale_slider_input
 scale = scale_slider_value * GLOBAL_SCALAR
 TILE_SIZE = int(scale * IMAGE_PIXEL_SIZE)
 
 vector_list = []
 tile_map = {}
-LAND_CHANCE_PERCENT_INT = 50 # Next to add to user prompts
+(set_land_chance,land_chance_input) = land_chance()
+LAND_CHANCE_PERCENT_INT = 50 if not set_land_chance else land_chance_input
 TILE_MAP_WIDTH = math.floor(WINDOW_WIDTH/TILE_SIZE)
 TILE_MAP_HEIGHT = math.floor(WINDOW_HEIGHT/TILE_SIZE)
 NUM_TILES = TILE_MAP_WIDTH*TILE_MAP_HEIGHT
@@ -71,18 +71,18 @@ tile_map_positions = []
 tile_map_types = []
 
 
-tile_pos_locator = True
-constant_mouse_pos_display = False
-
-generation = True
+generation = choose_generation()
 load_from_shape = not generation
 
-post_color_tiles = False
-pre_color_tiles = not post_color_tiles
+pre_color_tiles = tile_color_order()
+post_color_tiles = not pre_color_tiles
 
-vectors_rotate = True
-vectors_display = False
+vectors_rotate = rotate_vectors_prompt()
+vectors_display = display_vectors_prompt()
 color_tiles_after = True
 
 clicked_mouse_pos = (0,0)
 mouse_clicked = False
+
+tile_pos_locator = False
+constant_mouse_pos_display = False
