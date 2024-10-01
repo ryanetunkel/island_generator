@@ -38,7 +38,6 @@ def scale_slider():
                 scale_slider_input = int(scale_slider_input)
                 while 0 < scale_slider_input <= 16:
                     scale_slider_input_pending = False
-                    print("Should exit")
                     return (scale_slider_input,int(scale_slider_input))
                 else:
                     print("Input a whole number between 0 (exclusively) and 16 (inclusively).")
