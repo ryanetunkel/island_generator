@@ -17,8 +17,7 @@ CENTER_SCREEN = (WINDOW_WIDTH/2,WINDOW_HEIGHT/2)
 
 screen = pygame.display.set_mode(WINDOW_SIZE)
 pygame.display.set_caption("Island Generator")
-# pygame_icon = pygame.image.load("").convert_alpha()
-# pygame.display.set_icon(pygame_icon)
+
 clock = pygame.time.Clock()
 # test_font = pygame.font.Font("harolds_journey/font/Pixeltype.ttf",50)
 bg_surf = pygame.draw.rect(screen,"#222277",(0,0,WINDOW_WIDTH,WINDOW_HEIGHT))
@@ -30,7 +29,6 @@ bg_surf = pygame.draw.rect(screen,"#222277",(0,0,WINDOW_WIDTH,WINDOW_HEIGHT))
 # if WINDOW_WIDTH > bg_width or WINDOW_HEIGHT > bg_height:
 #     bg_scalar = bg_width_scalar if bg_width_scalar >= bg_height_scalar else bg_height_scalar
 #     bg_surf = pygame.transform.scale_by(bg_surf,bg_scalar)
-
 
 
 # Tileset spritesheet
@@ -47,6 +45,9 @@ image_coords = [
 images = sprite_sheet.images_at(image_coords, colorkey=(0, 0, 0))
 image = default_image
 IMAGE_PIXEL_SIZE = 16
+pygame_icon = sprite_sheet.image_at((16, 16, 16, 16), colorkey=(0, 0, 0))
+pygame.display.set_icon(pygame_icon)
+
 
 (set_scale_slider,scale_slider_input) = scale_slider()
 scale_slider_value = 4 if not set_scale_slider else scale_slider_input
